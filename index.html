@@ -77,7 +77,177 @@
     </div>
 
 
-   
+    <script>
+        // initialize highest score from the localStorage or default to 0 if it doesn't exit...
+        let highestScore = localStorage.getItem("highestScore") ? parseInt(localStorage.getItem("highestScore")) : 0;
+
+        //updates the highest score and display on the webpage...
+        document.getElementById("highest-score-value").textContent = highestScore;
+
+
+        // set up the canvas for drawing graphics and define all the variables for the game...
+        const canvas = document.getElementById("gameCanvas");
+        const context = canvas.getContext("2d");
+
+        const box = 13;
+        let score = 0;
+
+        let snake = [{ x: 10 * box, y: 10 * box }];
+        let food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
+        
+        let direction;
+
+        // change the direction of the snake based on the arrow key on keyboard by the user...
+
+        document.addEventListener("keydown", changeDir);
+
+        function changeDir(event) {
+            const key = event.keyCode;
+
+            if (key === 37 && direction !== "RIGHT") direction = "LEFT";
+            else if (key === 38 && direction !== "DOWN") direction = "UP";
+            else if (key === 39 && direction !== "LEFT") direction = "RIGHT";
+            else if (key === 40 && direction !== "UP") direction = "DOWN";
+        }
+
+        // draws a single segment of the snake...
+        function drawSnakeSegment(x, y, color) {
+            context.fillStyle = color;
+            const radius = box / 2.5; 
+
+            context.beginPath();
+            context.arc(x + radius, y + radius, radius, 0, Math.PI * 2); //draws a circle...
+            context.closePath();
+            context.fill();
+        }
+
+
+        // here lets draw the snake...
+        function drawSnake() {
+            for (let i = 0; i < snake.length; i++) {
+                const color = i === 0 ? "green" : "darkgreen"; //make the body lighter than the head in colors...
+
+                drawSnakeSegment(snake[i].x, snake[i].y, color);
+            }
+        }
+
+        // here lets draw the snake's food...
+        function drawFood() {
+            context.fillStyle = "red";
+
+            const radius = box / 2.5; //this calculates the radius of the circle
+            
+            const centerX = food.x + radius; //x-coordinates of the center of the circle...
+
+            const centerY = food.y + radius; // y-coordinates of the center of the circle...
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2); //this draws the circular food...
+
+            context.fill();
+        }
+
+        // here we draw the grids line of the canvas...
+        function drawGrid() {
+            context.strokeStyle = "#ccc"; //grid line color...
+            context.lineWidth = 0.5;
+
+            // draw vertical grid lines...
+            for (let i = 0; i <= canvas.width; i += box) {
+                context.beginPath();
+                context.moveTo(i, 0);
+                context.lineTo(i, canvas.height);
+                context.stroke();
+            }
+            // draw horizontal grid lines...
+            for (let i = 0; i <= canvas.height; i += box) {
+                context.beginPath();
+                context.moveTo(0, i);
+                context.lineTo(canvas.width, i);
+                context.stroke();
+            }
+        }
+
+        // here main draw function to clear the canvas and redraws the snake and food...
+        function draw() {
+            //clear the canvas...
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            //draws the drid lines...
+            drawGrid();
+
+            //draws the snake and food...
+            drawSnake();
+            drawFood();
+
+            // moves the snake...
+            let headX = snake[0].x;
+            let headY = snake[0].y;
+
+            if (direction === "LEFT") headX -= box;
+            else if (direction === "UP") headY -= box;
+            else if (direction === "RIGHT") headX += box;
+            else if (direction === "DOWN") headY += box;
+
+            //check for the collisions with the food...
+            if (headX === food.x && headY === food.y) {
+                score++;
+                food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
+            }
+            else {
+                snake.pop();
+            }
+
+            // check fro the collisons with the walls or own body ...
+            if ( headX < 0 || headY < 0 || headX >= canvas.width || headY >= canvas.height || collision(headX, headY, snake) ) {
+                clearInterval(game);
+                const restart = window.confirm("Game over! Your score: " + score + ". Do you want to restart the Game?");
+                if (restart) {
+                    location.reload(); //reload the page to restart the game...
+                }
+                return; //exit the function to stop further execution...
+            }
+
+            // update the highest score...
+            if (score > highestScore) {
+                highestScore = score;
+                localStorage.setItem("highestScore", highestScore);
+
+                //check if the current score equals highest score...
+                if (score === highestScore) {
+                    //here display message if the current score is equals the highest score...
+                    document.getElementById("highest-score-message").textContent = "Congratulations! You've hit the highest score!";
+                    console.log(textContent);
+                }
+                else {
+                    // clears the message if the current score is not the highest score...
+                    document.getElementById("highest-score-message").textContent = " ";
+                }
+            }
+
+            // add new head....
+            let newHead = { x: headX, y: headY };
+            snake.unshift(newHead);
+
+            // update score...
+            document.getElementById("score").textContent = score;
+        }
+
+        //check for collisions with the snake's own body or the canvas boundaries...
+        function collision(x, y, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (x === array[i].x && y === array[i].y) 
+                return true;
+            }
+            return false;
+        }
+
+
+        let game = setInterval(draw, 200);
+
+
+
+    </script>
 
 </body>
 </html>
