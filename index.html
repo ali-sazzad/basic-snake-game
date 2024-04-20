@@ -5,6 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Snake Game</title>
 
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+            margin: 0;
+            gap: 10px;
+            background-color: black;
+            color: white;
+        }
+        h1 {
+            position: absolute;
+            text-align: center;
+            top: 0;
+            font-size: 58px;
+        }
+        .score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: black;
+        }
+        #highest-score {
+            position: absolute;
+            top: 14%;
+            font-weight: 800;
+            font-size: 28px;
+        }
+        #highest-score-message {
+            position: absolute;
+            top: 18%;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        .game-container {
+            position: relative;
+            box-shadow: 0 0 200px 0px rgba(0, 255, 242, 0.3),
+                        0 0 400px 0px rgba(255, 0, 242, 0.3),
+                        0 0 600px 0px rgba(0, 255, 34, 0.3),
+                        0 0 800px 0px rgba(0, 204, 255, 0.3);
+        }
+        canvas {
+            background-color: rgb(255, 255, 255);
+            border: 5px solid rgb(255, 0, 0);
+        }
+
+    </style>
+
     
 </head>
 <body>
