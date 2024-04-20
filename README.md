@@ -3,6 +3,8 @@
 <h3>Welcome to the Basic Snake Game repository!</h3>
 <p>This is a simple implementation of the classic Snake game using HTML, CSS, and JavaScript. The game allows players to control a snake that moves around the screen, eating food to grow longer. However, if the snake collides with itself or the boundaries of the game area, it's game over!</p>
 
+<video src="https://github.com/ali-sazzad/basic-snake-game/assets/81892364/b57b4feb-6b06-4a11-8bd6-e41c797e46c4" loop autoplay muted > </video>
+
 <h2>How to Play:</h2>
 <ol>
   <li>Use the arrow keys on your keyboard to control the direction of the snake.</li>
